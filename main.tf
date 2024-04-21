@@ -88,14 +88,14 @@ resource "null_resource" "install" {
   }
   provisioner "file" {
     source      = "${abspath(path.module)}/install.sh"
-    destination = "${local.remote_workspace}/install.sh"
+    destination = "${local.remote_workspace}/install-script.sh"
   }
   provisioner "remote-exec" {
     inline = [<<-EOT
       set -x
       set -e
-      echo ${var.pw} | sudo -S -k chmod +x "${local.remote_workspace}/install.sh"
-      echo ${var.pw} | sudo -S -k ${local.remote_workspace}/install.sh "${local.role}" "${local.remote_path}" "${local.release}" "${local.install_method}" "${local.channel}"
+      echo ${var.pw} | sudo -S -k chmod +x "${local.remote_workspace}/install-script.sh"
+      echo ${var.pw} | sudo -S -k ${local.remote_workspace}/install-script.sh "${local.role}" "${local.remote_path}" "${local.release}" "${local.install_method}" "${local.channel}"
     EOT
     ]
   }
