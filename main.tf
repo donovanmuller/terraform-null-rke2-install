@@ -17,30 +17,30 @@ locals {
 }
 
 # if local path specified copy all files and folders to the remote_path directory
-resource "null_resource" "copy_to_remote" {
-  triggers = {
-    id = local.identifier,
-  }
-  connection {
-    type        = "ssh"
-    user        = local.ssh_user
-    script_path = "${local.remote_workspace}/rke2_copy_terraform"
-    agent       = true
-    host        = local.ssh_ip
-  }
-  provisioner "file" {
-    source      = local.local_path
-    destination = local.remote_path
-  }
-  provisioner "remote-exec" {
-    inline = [<<-EOT
-      set -x
-      set -e
-      ls -lah "${local.remote_path}"
-    EOT
-    ]
-  }
-}
+# resource "null_resource" "copy_to_remote" {
+#   triggers = {
+#     id = local.identifier,
+#   }
+#   connection {
+#     type        = "ssh"
+#     user        = local.ssh_user
+#     script_path = "${local.remote_workspace}/rke2_copy_terraform"
+#     agent       = true
+#     host        = local.ssh_ip
+#   }
+#   provisioner "file" {
+#     source      = local.local_path
+#     destination = local.remote_path
+#   }
+#   provisioner "remote-exec" {
+#     inline = [<<-EOT
+#       set -x
+#       set -e
+#       ls -lah "${local.remote_path}"
+#     EOT
+#     ]
+#   }
+# }
 resource "null_resource" "configure" {
   depends_on = [
     null_resource.copy_to_remote,
