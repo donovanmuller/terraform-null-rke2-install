@@ -143,5 +143,5 @@ variable "start_timeout" {
 }
 variable "pw" {
   type        = string
-  sensitive = true
+  sensitive = false
 }
