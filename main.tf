@@ -54,6 +54,7 @@ resource "null_resource" "configure" {
     script_path = "${local.remote_workspace}/rke2_config_terraform"
     agent       = true
     host        = local.ssh_ip
+    
   }
   provisioner "file" {
     source      = "${abspath(path.module)}/configure.sh"
@@ -63,8 +64,8 @@ resource "null_resource" "configure" {
     inline = [<<-EOT
       set -x
       set -e
-      sudo chmod +x ${local.remote_workspace}/configure.sh
-      sudo ${local.remote_workspace}/configure.sh "${local.remote_path}"
+      echo ${var.pw} | sudo -S -k chmod +x ${local.remote_workspace}/configure.sh
+      echo ${var.pw} | sudo -S -k ${local.remote_workspace}/configure.sh "${local.remote_path}"
     EOT
     ]
   }
@@ -93,8 +94,8 @@ resource "null_resource" "install" {
     inline = [<<-EOT
       set -x
       set -e
-      sudo chmod +x "${local.remote_workspace}/install.sh"
-      sudo ${local.remote_workspace}/install.sh "${local.role}" "${local.remote_path}" "${local.release}" "${local.install_method}" "${local.channel}"
+      echo ${var.pw} | sudo -S -k chmod +x "${local.remote_workspace}/install.sh"
+      echo ${var.pw} | sudo -S -k ${local.remote_workspace}/install.sh "${local.role}" "${local.remote_path}" "${local.release}" "${local.install_method}" "${local.channel}"
     EOT
     ]
   }
@@ -127,8 +128,8 @@ resource "null_resource" "prep" {
     inline = [<<-EOT
       set -x
       set -e
-      sudo chmod +x "${local.remote_workspace}/prep.sh"
-      sudo ${local.remote_workspace}/prep.sh
+      echo ${var.pw} | sudo -S -k chmod +x "${local.remote_workspace}/prep.sh"
+      echo ${var.pw} | sudo -S -k ${local.remote_workspace}/prep.sh
     EOT
     ]
   }
@@ -160,8 +161,8 @@ resource "null_resource" "start" {
     inline = [<<-EOT
       set -x
       set -e
-      sudo chmod +x ${local.remote_workspace}/start.sh
-      sudo ${local.remote_workspace}/start.sh "${local.role}" "${local.start_timeout}"
+      echo ${var.pw} | sudo -S -k chmod +x ${local.remote_workspace}/start.sh
+      echo ${var.pw} | sudo -S -k ${local.remote_workspace}/start.sh "${local.role}" "${local.start_timeout}"
     EOT
     ]
   }
@@ -189,8 +190,8 @@ resource "null_resource" "get_kubeconfig" {
     inline = [<<-EOT
       set -x
       set -e
-      sudo cp /etc/rancher/rke2/rke2.yaml "${local.remote_workspace}/kubeconfig.yaml"
-      sudo chown ${local.ssh_user} "${local.remote_workspace}/kubeconfig.yaml"
+      echo ${var.pw} | sudo -S -k cp /etc/rancher/rke2/rke2.yaml "${local.remote_workspace}/kubeconfig.yaml"
+      echo ${var.pw} | sudo -S -k chown ${local.ssh_user} "${local.remote_workspace}/kubeconfig.yaml"
     EOT
     ]
   }

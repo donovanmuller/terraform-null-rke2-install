@@ -141,3 +141,7 @@ variable "start_timeout" {
   EOT
   default     = "5"
 }
+variable "pw" {
+  type        = string
+  sensitive = true
+}
