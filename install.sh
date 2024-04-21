@@ -32,7 +32,7 @@ export INSTALL_RKE2_TYPE="${ROLE}"
 if [ "${INSTALL_METHOD}" = "rpm" ]; then 
   unset INSTALL_RKE2_ARTIFACT_PATH;
 else
-  export INSTALL_RKE2_ARTIFACT_PATH="${REMOTE_PATH}";
+  export INSTALL_RKE2_ARTIFACT_PATH="${REMOTE_PATH}/rke-artifacts";
 fi
 if [ ! -f "${REMOTE_PATH}"/install.sh ]; then
   curl -sfL https://get.rke2.io -o "${REMOTE_PATH}"/install.sh
