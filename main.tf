@@ -42,9 +42,9 @@ locals {
 #   }
 # }
 resource "null_resource" "configure" {
-  depends_on = [
-    null_resource.copy_to_remote,
-  ]
+  # depends_on = [
+  #   null_resource.copy_to_remote,
+  # ]
   triggers = {
     id = local.identifier,
   }
@@ -72,7 +72,7 @@ resource "null_resource" "configure" {
 # run the install script, which may upgrade rke2 if it is already installed
 resource "null_resource" "install" {
   depends_on = [
-    null_resource.copy_to_remote,
+    # null_resource.copy_to_remote,
     null_resource.configure,
   ]
   triggers = {
@@ -104,7 +104,7 @@ resource "null_resource" "install" {
 resource "null_resource" "prep" {
   count = (local.server_prep_script == "" ? 0 : 1)
   depends_on = [
-    null_resource.copy_to_remote,
+    # null_resource.copy_to_remote,
     null_resource.configure,
     null_resource.install,
   ]
@@ -137,7 +137,7 @@ resource "null_resource" "prep" {
 resource "null_resource" "start" {
   count = (local.start == true ? 1 : 0)
   depends_on = [
-    null_resource.copy_to_remote,
+    # null_resource.copy_to_remote,
     null_resource.configure,
     null_resource.install,
     null_resource.prep,
@@ -169,7 +169,7 @@ resource "null_resource" "start" {
 resource "null_resource" "get_kubeconfig" {
   count = (local.retrieve_kubeconfig == true ? 1 : 0)
   depends_on = [
-    null_resource.copy_to_remote,
+    # null_resource.copy_to_remote,
     null_resource.configure,
     null_resource.install,
     null_resource.start,
@@ -211,7 +211,7 @@ resource "null_resource" "get_kubeconfig" {
 data "local_file" "kubeconfig" {
   count = (local.retrieve_kubeconfig == true ? 1 : 0)
   depends_on = [
-    null_resource.copy_to_remote,
+    # null_resource.copy_to_remote,
     null_resource.configure,
     null_resource.install,
     null_resource.start,
